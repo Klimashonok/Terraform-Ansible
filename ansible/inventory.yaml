@@ -1,0 +1,17 @@
+---
+linux:
+  children:
+    nginx_proxy:
+      hosts:
+        vm_proxy:
+          ansible_host: 158.160.101.197  # Прокси Nginx
+    nginx_backend:
+      hosts:
+        vm_backend1:
+          ansible_host: 158.160.119.190  # Первый отдающий сервер
+        vm_backend2:
+          ansible_host: 158.160.124.163  # Второй отдающий сервер
+  vars:
+    ansible_user: yc-user
+    ansible_ssh_private_key_file: ~/terraform_yandex/namekey
+    ansible_become: true

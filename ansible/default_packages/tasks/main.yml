@@ -1,0 +1,27 @@
+---
+# tasks file for default_packages
+
+- name: Установка программ #Имя задачи 
+  apt: #Используемый модуль
+    name: "{{ item }}" #Имя пакета из цикла
+    state: present #Параметр действия. present - установить, absent - удалить
+  loop:
+    - "{{ packages_to_install }}" #Цикл будет перебирать все значения из переменной "packages"
+  become: yes
+ # when: ansible_distribution == "Debian" # Выполнится только на Debian системах---
+# tasks file for default_packages
+- name: Configuring zabbix-agent
+  become: yes
+  ansible.builtin.template:
+    src: zabbix_agentd.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Restarting and enabling zabbix-agent
+  become: yes
+  ansible.builtin.service:
+    name: zabbix-agent
+    state: restarted
+    enabled: yes

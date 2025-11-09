@@ -1,0 +1,22 @@
+- name: Настройка прокси nginx
+  copy:
+    dest: /etc/nginx/sites-available/default
+    content: |
+      upstream backend_pool {
+      {% for host in groups['nginx_backend'] %}
+          server {{ hostvars[host].ansible_host }}:80;
+      {% endfor %}
+      }
+
+      server {
+          listen 3000;
+
+          location / {
+              proxy_pass http://backend_pool;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          }
+      }
+  notify:
+    - Проверка и перезапуск nginx

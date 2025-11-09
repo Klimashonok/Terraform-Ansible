@@ -1,0 +1,19 @@
+---
+- name: Установка nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Запуск nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Создание кастомной страницы
+  template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+    mode: '0644'
+# tasks file for nginx_backend

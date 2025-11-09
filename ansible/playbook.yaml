@@ -1,0 +1,24 @@
+---
+- name: Настройка виртуальных машин (имя и стандартные пакеты)
+  hosts: all
+  become: yes
+  roles:
+    - role: setup_vm
+  tags:
+    - setup_vm
+
+- name: Настройка отдающего Nginx
+  hosts: nginx_backend
+  become: yes
+  roles:
+    - role: nginx_backend
+  tags:
+    - nginx_backend
+
+- name: Настройка проксирующего Nginx
+  hosts: nginx_proxy
+  become: yes
+  roles:
+    - role: nginx_proxy
+  tags:
+    - nginx_proxy

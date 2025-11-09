@@ -1,0 +1,19 @@
+---
+- name: Проверка и перезапуск nginx
+  block:
+    - name: Проверка конфигурации nginx
+      command: nginx -t
+      register: nginx_test
+      ignore_errors: yes
+
+    - name: Вывод ошибок конфигурации
+      debug:
+        var: nginx_test.stderr
+      when: nginx_test.rc != 0
+
+    - name: Перезапуск nginx
+      service:
+        name: nginx
+        state: restarted
+      when: nginx_test.rc == 0
+# handlers file for nginx_proxy
